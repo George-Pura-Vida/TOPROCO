@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 780" role="img" aria-label="Hory, svítání a postava hledící do dálky"><defs>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#09152d"/><stop offset=".36" stop-color="#223d68"/><stop offset=".56" stop-color="#d8865c"/><stop offset=".75" stop-color="#f4c879"/><stop offset="1" stop-color="#284664"/></linearGradient>
+<radialGradient id="sun"><stop offset="0" stop-color="#fff8cb" stop-opacity="1"/><stop offset=".26" stop-color="#ffe7a9" stop-opacity=".82"/><stop offset=".62" stop-color="#f4be7a" stop-opacity=".3"/><stop offset="1" stop-color="#ffcb73" stop-opacity="0"/></radialGradient>
+<linearGradient id="fade"><stop offset="0" stop-color="#081629" stop-opacity="1"/><stop offset=".32" stop-color="#0a1d39" stop-opacity=".96"/><stop offset=".56" stop-color="#09213a" stop-opacity=".55"/><stop offset="1" stop-color="#07172c" stop-opacity=".12"/></linearGradient>
+<linearGradient id="front" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#213c56"/><stop offset="1" stop-color="#07172d"/></linearGradient>
+<filter id="blur"><feGaussianBlur stdDeviation="24"/></filter>
+</defs>
+<rect width="1600" height="780" fill="url(#sky)"/><circle cx="1078" cy="368" r="305" fill="url(#sun)"/>
+<path d="M0 483 154 377 247 445 364 303 465 405 593 284 749 435 892 314 1098 461 1201 323 1389 428 1485 338 1600 447V780H0Z" fill="#304c69" opacity=".50"/>
+<path d="M0 552 157 454 279 532 395 389 530 513 699 369 848 524 1005 405 1165 532 1318 393 1498 510 1600 438V780H0Z" fill="#24435d" opacity=".62"/>
+<path d="M0 642 141 516 280 598 437 486 597 583 760 472 905 593 1068 499 1216 560 1407 478 1600 612V780H0Z" fill="#17324c"/>
+<path d="M0 730 166 610 327 674 488 592 666 691 814 618 1011 691 1207 602 1399 673 1600 579V780H0Z" fill="url(#front)"/>
+<path d="M800 780 891 716 944 727 1001 686 1053 710 1118 666 1230 722 1322 709 1384 780Z" fill="#081d2e"/>
+<ellipse cx="1090" cy="732" rx="125" ry="28" fill="#071626" opacity=".7"/>
+<!-- hiker standing on right hand summit -->
+<g fill="#071522" stroke="#071522" stroke-linejoin="round">
+<path d="M1070 710 1051 644 1064 582 1088 578 1100 646 1086 706 1068 707Z"/>
+<path d="M1050 649 1021 704 1038 709 1074 662Z"/>
+<path d="M1086 649 1113 711 1132 711 1102 645Z"/>
+<path d="M1059 587 1002 562 967 528 952 527 944 539 986 584 1058 611Z"/>
+<path d="M1087 591 1141 555 1179 509 1193 510 1200 520 1156 576 1103 617Z"/>
+<rect x="1058" y="570" width="36" height="84" rx="17"/>
+<circle cx="1076" cy="548" r="24"/>
+</g>
+<path d="M1058 595q16-7 33 0v58q-17 10-33 0Z" fill="#dc9b43" opacity=".6"/>
+<path d="M0 0H1600V780H0Z" fill="url(#fade)"/>
+<path d="M0 779H1600" stroke="#eab858" stroke-opacity=".28"/>
+</svg>
