@@ -18,6 +18,21 @@ jobs:
           node-version: '22'
       - name: JavaScript and markup smoke tests
         run: node --test tests/site.test.mjs
+      - name: Install headless browser test dependency
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Test desktop, tablet and mobile interfaces
+        run: node tests/browser.mjs
+      - name: Attach screenshots for review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: toproco-browser-previews
+          path: |
+            toproco-mobile.png
+            toproco-desktop.png
+          if-no-files-found: ignore
       - name: Validate self-hosted vector artwork
         run: |
           python3 - <<'PY'
