@@ -75,10 +75,65 @@ header{background:#081d39;color:white;border-color:#234563;box-shadow:0 5px 22px
 .tp-privacy-footer-links>a{font-size:13px;color:#f6d58c}
 .tp-privacy-footer-links>a:last-child{color:#e5edf7}
 @media(max-width:600px){.tp-privacy-footer-links{flex-direction:column;gap:8px}}
+
+/* TOPROCO 2.1 — gold Flower of Life + unified, single-row desktop footer */
+header .logo-mark,.footer .logo-mark{
+  display:grid;place-items:center;flex:0 0 58px;
+  width:58px;height:58px;margin:0;
+  padding:0;background:transparent;border:0;border-radius:0;box-shadow:none;
+}
+header .logo-mark img,.footer .logo-mark img{
+  display:block;width:100%;height:100%;object-fit:contain;
+  filter:drop-shadow(0 0 5px rgba(238,183,78,.18));
+}
+header .brand-name{font-size:clamp(22px,2.1vw,27px);letter-spacing:.018em;}
+header .brand-sub{font-size:8px;line-height:1.4;letter-spacing:.055em;color:#f3c772;white-space:normal;max-width:245px;}
+.footer{background:linear-gradient(155deg,#071b36 0%,#061528 100%);
+  border-top:1px solid rgba(242,190,87,.38);color:#edf4fb;
+  padding:32px 0 28px;box-shadow:inset 0 1px rgba(255,255,255,.03);
+}
+.footer-layout{display:flex;flex-direction:column;gap:24px;}
+.footer-top{display:flex;align-items:center;justify-content:space-between;gap:22px;min-width:0;}
+.footer-logo{flex:0 0 auto;gap:10px;white-space:nowrap;}
+.footer .footer-logo .logo-mark{width:50px;height:50px;flex-basis:50px;}
+.footer .footer-logo .brand-name{font-weight:900;font-size:clamp(24px,2.4vw,33px);letter-spacing:.025em;color:#f9fbff;}
+.footer-links{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:nowrap;min-width:0;}
+.footer-links a{display:inline-flex;align-items:center;justify-content:center;
+  min-height:44px;padding:10px 14px;
+  border:1px solid rgba(232,178,76,.38);
+  background:rgba(238,194,107,.075);color:#f6d38a;
+  font-size:13px;font-weight:750;line-height:1.3;
+  border-radius:10px;text-decoration:none;text-align:center;white-space:nowrap;
+  transition:background .18s ease,border-color .18s ease,color .18s ease;
+}
+.footer-links a:hover{background:rgba(239,188,89,.17);color:#fff0ba;border-color:#f1c773;}
+.footer-links a:focus-visible,.footer-logo:focus-visible{outline:3px solid #f6c568;outline-offset:3px;}
+.footer-bottom{border-top:1px solid rgba(192,207,228,.17);padding-top:17px;display:flex;
+  justify-content:space-between;align-items:flex-start;gap:18px;}
+.footer-bottom p{margin:0;max-width:860px;font-size:12px;line-height:1.7;color:#b9c9da;}
+.footer-copyright{color:#f3cb7c;font-size:12px;flex:0 0 auto;padding-top:1px;}
+@media(max-width:1080px){header .logo-mark{width:50px;height:50px;flex-basis:50px;}
+  header .brand-sub{max-width:220px}
+  .footer-links a{font-size:12px;padding:10px 12px}
+}
+@media(max-width:780px){.footer-top{align-items:flex-start;flex-direction:column;gap:16px;}
+  .footer-links{justify-content:flex-start;width:100%;flex-wrap:wrap;}
+  .footer-bottom{flex-direction:column;gap:8px}
+}
+@media(max-width:480px){header .logo-mark{width:44px;height:44px;flex-basis:44px;}
+  header .brand-name{font-size:21px}
+  header .brand-sub{font-size:6.2px;letter-spacing:0;max-width:170px;}
+  .footer{padding:26px 0}
+  .footer-links{display:grid;grid-template-columns:1fr;gap:9px}
+  .footer-links a{width:100%;white-space:normal;font-size:13px;}
+  .footer-bottom p{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){.footer-links a{transition:none}}
+
 </style></head><body>
 <a class="skip" href="#content">Přeskočit na obsah</a>
 <header><div class="container bar">
-<a href="#top" class="logo" aria-label="TOPROCO — úvod"><span class="logo-mark" aria-hidden="true"><svg viewBox="0 0 64 64" width="46" height="46"><path d="M7 40c12 16 39 12 49-6M10 41C4 28 18 18 33 17" fill="none" stroke="#f4c366" stroke-width="3.5" stroke-linecap="round"/><path d="m28 35 11-14 7 5 9-14" fill="none" stroke="#f4c366" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="18" cy="42" r="3" fill="#f4c366"/></svg></span><span><span class="brand-name">TOPROCO</span><span class="brand-sub">TOGETHER · PROSPERITY · WORK · COMMUNITY</span></span></a>
+<a href="#top" class="logo" aria-label="TOPROCO — úvod"><span class="logo-mark" aria-hidden="true"><img src="/assets/flower-of-life.svg" width="58" height="58" alt="" decoding="async"></span><span><span class="brand-name">TOPROCO</span><span class="brand-sub">TOGETHER · PROSPERITY · WORK · COMMUNITY</span></span></a>
 <nav class="desktop-nav" aria-label="Hlavní navigace"><a href="#top" class="active-home" data-i="navHome">⌂ Domů</a><a href="#produkty" data-i="navProducts">Řešení</a><a href="#benefity" data-i="navBenefits">Výhody</a><a href="#komunita" data-i="navCommunity">Komunita</a><a href="#insights" data-i="navInsights">AI & Nástroje</a><a href="#partneri" data-i="navPartners">Pro firmy</a></nav>
 <label class="sr-only" for="lang">Jazyk</label><select id="lang" class="lang" aria-label="Zvolit jazyk"><option value="cs">CZ</option><option value="sk">SK</option><option value="en">EN</option><option value="es">ES</option><option value="zh">中文</option></select>
 <a class="top-cta" href="#produkty" data-i="navStart">Začít nyní ↗</a><button class="menu-button" id="mobileNavButton" type="button" aria-label="Otevřít nabídku" aria-controls="navDrop" aria-expanded="false">☰</button></div>
@@ -103,7 +158,20 @@ header{background:#081d39;color:white;border-color:#234563;box-shadow:0 5px 22px
 <section class="section alt" id="bezpecnost"><div class="container"><span class="kicker" data-i="securityKicker">DŮVĚRA PŘED RŮSTEM</span><h2 data-i="securityTitle">Bezpečnost, právo a odpovědnost od prvního dne.</h2><p class="section-intro" data-i="securityLead">Tyto zásady představují požadovanou cílovou architekturu. Nasazení musí projít nezávislým ověřením.</p><div class="security-list"><div class="security-item"><b data-i="sec1Title">Bezpečná identita</b><p data-i="sec1Text">Passkeys/MFA, oddělené role, nejnižší nutná oprávnění, auditní stopa.</p></div><div class="security-item"><b data-i="sec2Title">Data a soukromí</b><p data-i="sec2Text">GDPR, šifrování, minimalizace dat, oddělení zákazníků, zálohy.</p></div><div class="security-item"><b data-i="sec3Title">Bezpečný vývoj</b><p data-i="sec3Text">Kontrola závislostí, skenování tajných klíčů, testy, revize, plán obnovy.</p></div><div class="security-item"><b data-i="sec4Title">Odolnost proti podvodům</b><p data-i="sec4Text">Anti-phishing postupy, DMARC, SPF/DKIM, rate-limit, WAF a monitoring.</p></div><div class="security-item"><b data-i="sec5Title">Know-how a licence</b><p data-i="sec5Text">Práva ke kódu, licence knihoven, smlouvy s vývojáři, ochranné známky.</p></div><div class="security-item"><b data-i="sec6Title">AI s dohledem</b><p data-i="sec6Text">Automatické návrhy; citlivé akce, finanční pokyny a produkční změny až po schválení.</p></div></div></div></section>
 <section class="getting-started section" id="zacit"><div class="container"><h2 data-i="stepsTitle">Jak začít?</h2><div class="start-grid"><div class="start-step"><span>1</span><b data-i="step1">Prozkoumejte aplikace</b></div><div class="start-step"><span>2</span><b data-i="step2">Vyberte svůj cíl</b></div><div class="start-step"><span>3</span><b data-i="step3">Vytvořte modelový plán</b></div><div class="start-step"><span>4</span><b data-i="step4">Rozvíjejte jej společně</b></div></div><a class="btn btn-primary" href="#produkty" data-i="navStart">Začít nyní ↗</a></div></section>
 <section class="cta"><div class="container"><span class="kicker" style="color:#5c4230" data-i="lastKicker">BUDUJME HODNOTU SPOLEČNĚ</span><h2 data-i="lastTitle">Vaše myšlenky. Vaše prosperita.<br>Společná práce. Skutečný úspěch.</h2><p class="section-intro" data-i="lastLead">Hledáme dialog se strategickými partnery a firmami, které chtějí spoluvytvářet praktické finanční technologie.</p><a href="https://jirijanousek.cz/" target="_blank" rel="noopener noreferrer" class="btn" data-i="lastButton">Kontaktovat iniciátora projektu ↗</a></div></section>
-</main><footer class="footer"><div class="container footer-grid"><div><a class="logo" href="#top"><span class="logo-mark" aria-hidden="true">✧</span><span class="brand-name">TOPROCO</span></a><p data-i="footerText">Pilotní veřejná prezentace, nikoliv spuštěná společnost. Název a domény vyžadují právní, známkovou a registrační rešerši. Obsah nepředstavuje investiční doporučení ani veřejnou nabídku cenných papírů.</p></div><div class="tp-privacy-footer-links"><a href="/privacy.html" rel="nofollow" data-i="privacyPolicyFooter">Soukromí a cookies</a><button type="button" data-toproco-privacy-open class="tp-privacy-footer-action">Nastavení soukromí</button><a href="https://jirijanousek.cz/" target="_blank" rel="noopener noreferrer">jirijanousek.cz ↗</a></div></div></footer>
+</main><footer class="footer" id="footer"><div class="container footer-layout">
+  <div class="footer-top">
+    <a class="logo footer-logo" href="#top" aria-label="TOPROCO – návrat na začátek"><span class="logo-mark" aria-hidden="true"><img src="/assets/flower-of-life.svg" width="50" height="50" alt="" decoding="async" loading="lazy"></span><span class="brand-name">TOPROCO</span></a>
+    <nav class="footer-links" aria-label="Odkazy v patičce">
+      <a href="/privacy.html" target="_blank" rel="noopener noreferrer" data-i="privacyPolicyFooter">Zásady soukromí a cookies ↗</a>
+      <a href="/privacy.html#storage" target="_blank" rel="noopener noreferrer" data-i="privacyCookiesFooter">Cookies a technologie ↗</a>
+      <a href="https://jirijanousek.cz/" target="_blank" rel="noopener noreferrer">jirijanousek.cz ↗</a>
+    </nav>
+  </div>
+  <div class="footer-bottom">
+    <p data-i="footerText">Pilotní veřejná prezentace, nikoliv spuštěná společnost. Název a domény vyžadují právní, známkovou a registrační rešerši. Obsah nepředstavuje investiční doporučení ani veřejnou nabídku cenných papírů.</p>
+    <span class="footer-copyright">© TOPROCO 2026</span>
+  </div>
+</div></footer>
 <script>
 'use strict';
 const dict={
@@ -125,6 +193,11 @@ Object.assign(dict.sk,{privacyPolicyFooter:"Zásady súkromia a cookies"});
 Object.assign(dict.en,{privacyPolicyFooter:"Privacy and cookies"});
 Object.assign(dict.es,{privacyPolicyFooter:"Privacidad y cookies"});
 Object.assign(dict.zh,{privacyPolicyFooter:"隐私与 Cookie"});
+Object.assign(dict.cs,{"privacyPolicyFooter":"Zásady soukromí a cookies ↗","privacyCookiesFooter":"Cookies a technologie ↗"});
+Object.assign(dict.sk,{"privacyPolicyFooter":"Ochrana súkromia a cookies ↗","privacyCookiesFooter":"Cookies a technológie ↗"});
+Object.assign(dict.en,{"privacyPolicyFooter":"Privacy and cookies ↗","privacyCookiesFooter":"Cookies and technologies ↗"});
+Object.assign(dict.es,{"privacyPolicyFooter":"Privacidad y cookies ↗","privacyCookiesFooter":"Cookies y tecnologías ↗"});
+Object.assign(dict.zh,{"privacyPolicyFooter":"隐私与 Cookie 政策 ↗","privacyCookiesFooter":"Cookie 与相关技术 ↗"});
 const audienceDict={cs:{person:['Získej přehled o své budoucnosti.','Spočítej si scénáře investování a renty. Rozhodování začíná srozumitelnými daty.','Vybrat aplikaci ↗','#produkty'],advisor:['Pomáhej klientům srozumitelně.','Modelové výpočty, přehled portfolií a plánovaná firemní verze CRM.','Prozkoumat produkty ↗','#produkty'],company:['Zaměstnanecké benefity i obchodní workflow.','Ukázky DIP a návrh licenčních řešení pro pracovní týmy.','Zjistit více ↗','#partneri'],investor:['Podpoř vývoj ověřený skutečnou poptávkou.','Hledáme strategické partnery; skutečná investiční nabídka vyžaduje právní přípravu a ověření výsledků.','Strategické partnerství ↗','#partneri']},en:{person:['Plan your future with confidence.','Explore investment and retirement scenarios with understandable numbers.','Choose a tool ↗','#produkty'],advisor:['Give clients clearer conversations.','Planning tools, portfolio views and a proposed team CRM.','Explore products ↗','#produkty'],company:['Better benefits, better workflows.','DIP examples and a planned B2B licence stack.','Learn more ↗','#partneri'],investor:['Support products validated by demand.','We seek strategic partnerships; any equity offer requires separate legal work.','Partnerships ↗','#partneri']},sk:{person:['Plánujte svoju budúcnosť.','Investičné a rentové scenáre s jasnými číslami.','Vybrať aplikáciu ↗','#produkty'],advisor:['Zrozumiteľnejšia starostlivosť.','Modelovanie a plánované tímové CRM.','Preskúmať ↗','#produkty'],company:['Benefity a obchodné procesy.','DIP a plánované licencie pre firmy.','Viac informácií ↗','#partneri'],investor:['Podporte overiteľnú hodnotu.','Strategické partnerstvá, nie verejná investičná ponuka.','Partnerstvo ↗','#partneri']},es:{person:['Planifica tu futuro.','Escenarios de inversión y renta con números claros.','Elegir herramienta ↗','#produkty'],advisor:['Mejora la comunicación con clientes.','Modelos financieros y CRM de equipo proyectado.','Explorar productos ↗','#produkty'],company:['Beneficios y flujos de trabajo.','Ejemplos DIP y licencias B2B planificadas.','Saber más ↗','#partneri'],investor:['Apoya el valor validado.','Colaboraciones estratégicas, no una oferta de inversión pública.','Colaboración ↗','#partneri']},zh:{person:['规划你的未来。','用清晰数据查看投资和退休收入情景。','选择产品 ↗','#produkty'],advisor:['帮助客户理解选择。','模型工具与规划中的团队 CRM。','探索产品 ↗','#produkty'],company:['员工福利与业务流程。','DIP 方案和规划中的企业授权。','了解更多 ↗','#partneri'],investor:['支持有真实需求的产品。','寻求战略合作，不是公开证券发行。','合作详情 ↗','#partneri']}};
 const $=id=>document.getElementById(id);let lang='cs';let audience='person';
 function updateAudience(){const v=audienceDict[lang][audience];$('audTitle').textContent=v[0];$('audText').textContent=v[1];$('audLink').textContent=v[2];$('audLink').setAttribute('href',v[3]);}
