@@ -1,0 +1,26 @@
+/* TOPROCO privacy UX: compact, non-blocking, responsive, accessible */
+.tp-privacy-banner[hidden],.tp-privacy-dialog[hidden]{display:none!important}
+.tp-privacy-banner{position:fixed;z-index:120;left:max(12px,env(safe-area-inset-left));right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));max-width:1020px;margin:0 auto;padding:16px 18px;background:#102743;color:#f8fbff;border:1px solid #c69953;border-radius:16px;box-shadow:0 14px 40px #06131c85;display:flex;align-items:center;gap:16px;justify-content:space-between;flex-wrap:wrap;font-size:14px;line-height:1.5}
+.tp-privacy-banner p{margin:0;max-width:670px;flex:1 1 420px}
+.tp-privacy-banner strong{color:#ffd181}
+.tp-privacy-banner-actions{display:flex;align-items:center;gap:8px;flex:0 0 auto;flex-wrap:wrap}
+.tp-privacy-banner button,.tp-privacy-banner a,.tp-privacy-dialog button{font:inherit;font-weight:750;cursor:pointer;min-height:44px;padding:9px 15px;border-radius:10px}
+.tp-privacy-banner button:focus-visible,.tp-privacy-banner a:focus-visible,.tp-privacy-dialog button:focus-visible,.tp-privacy-toggle:focus-visible{outline:3px solid #ffd06c;outline-offset:3px}
+.tp-privacy-banner .tp-primary{border:1px solid #f0ba5e;color:#13273e;background:#f3c36b}
+.tp-privacy-banner .tp-secondary{border:1px solid #8aa7c3;color:#fff;background:#1b3f64}
+.tp-privacy-banner .tp-close{min-width:44px;padding:7px;border:1px solid #6484a4;color:#f6f8ff;background:transparent;font-size:21px}
+.tp-privacy-dialog{position:fixed;z-index:130;max-width:min(620px,calc(100vw - 26px));width:100%;max-height:calc(100dvh - 30px);overflow:auto;border:1px solid #d4bd89;border-radius:18px;padding:0;box-shadow:0 25px 80px #05182b88;background:#fff;color:#182c41}
+.tp-privacy-dialog::backdrop{background:#081b2baa;backdrop-filter:blur(3px)}
+.tp-privacy-dialog-inner{padding:clamp(18px,4vw,29px)}
+.tp-privacy-dialog h2{font-size:25px;line-height:1.2;margin:0 0 15px;color:#0e2d4b}
+.tp-privacy-dialog p{font-size:14px;line-height:1.65;color:#42586a}
+.tp-privacy-dialog .tp-category{padding:14px;border:1px solid #dbe4ed;background:#f7f9fb;border-radius:11px;margin:12px 0}
+.tp-privacy-dialog .tp-category strong{display:block;color:#123454;font-size:15px;margin-bottom:4px}
+.tp-privacy-dialog .tp-category span{display:block;color:#547085;font-size:13px}
+.tp-privacy-dialog .tp-dialog-actions{display:flex;justify-content:flex-end;align-items:center;gap:10px;flex-wrap:wrap;margin-top:20px}
+.tp-privacy-dialog .tp-dialog-actions button{color:#14283d;background:#f3c46d;border:1px solid #d0a25a}
+.tp-privacy-dialog a{color:#135ea2;text-decoration:underline}
+.tp-privacy-footer-action{appearance:none;border:0;background:transparent;padding:3px 0;color:#f2cf85;text-decoration:underline;cursor:pointer;text-underline-offset:3px;font:inherit;font-size:13px}
+.tp-privacy-footer-action:focus-visible{outline:2px solid #f2cf85;outline-offset:3px}
+@media(max-width:650px){.tp-privacy-banner{align-items:stretch;gap:10px;font-size:12px;padding:13px 12px;border-radius:13px}.tp-privacy-banner p{flex:1 1 100%}.tp-privacy-banner-actions{width:100%;display:grid;grid-template-columns:1fr 1fr 44px;gap:6px}.tp-privacy-banner button{font-size:12px;padding:8px 6px}.tp-privacy-dialog h2{font-size:21px}.tp-privacy-dialog .tp-dialog-actions button{width:100%}}
+@media(prefers-reduced-motion:reduce){.tp-privacy-dialog::backdrop{backdrop-filter:none}}
