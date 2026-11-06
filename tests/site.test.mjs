@@ -8,9 +8,10 @@ test('HTML includes semantic structure and unique IDs',()=>{
   for(const token of ['<html lang="cs"','<main id="content"','</main>','<footer','</html>'])assert.ok(html.includes(token),token);
   assert.equal(new Set(ids).size,ids.length);
 });
-test('Main product links are present and public CRM is not advertised',()=>{
-  for(const domain of ['muj-dip.jirijanousek.cz','moje-renta.jirijanousek.cz','moje-krypto.jirijanousek.cz'])assert.ok(html.includes(domain),domain);
-  assert.ok(html.includes('Firemní verze v přípravě'));
+test('All four product cards link to intended destinations without exposing CRM data',()=>{
+  for(const domain of ['muj-dip.jirijanousek.cz','moje-renta.jirijanousek.cz','moje-krypto.jirijanousek.cz','muj-kmen.jirijanousek.cz'])assert.ok(html.includes(domain),domain);
+  assert.match(html,/href="https:\/\/muj-kmen\.jirijanousek\.cz\/"[^>]*data-i="partnerApp"/);
+  assert.ok(html.includes('Soukromé CRM pro klientskou péči'));
 });
 test('All responsive artwork is self-hosted',()=>{
   for(const file of ['hero-sunrise','product-dip','product-renta','product-krypto','product-kmen']){
