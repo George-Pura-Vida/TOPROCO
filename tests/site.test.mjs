@@ -33,12 +33,12 @@ test('Disclaimers and prelaunch restrictions remain',()=>{
 });
 
 test('Brand uses gold Flower of Life and footer links open in new tabs',()=>{
-  assert.equal((html.match(/src="\\/assets\\/flower-of-life\\.svg"/g)||[]).length,2);
+  assert.equal(html.split('src="/assets/flower-of-life.svg"').length-1,2);
   assert.ok(existsSync(new URL('../assets/flower-of-life.svg',import.meta.url)));
   assert.ok(html.includes('class="footer-top"'));
   assert.ok(html.includes('class="footer-bottom"'));
   const footer=html.split('<footer class="footer"')[1].split('</footer>')[0];
-  const links=[...footer.matchAll(/<a\\b[^>]*href="([^"]+)"[^>]*>/g)].filter(x=>x[1]!=='#top');
+  const links=[...footer.matchAll(/<a[^>]*href="([^"]+)"[^>]*>/g)].filter(x=>x[1]!=='#top');
   assert.equal(links.length,3);
   for(const link of links){assert.match(link[0],/target="_blank"/);assert.match(link[0],/rel="noopener noreferrer"/)}
   const privacy=readFileSync(new URL('../privacy.html',import.meta.url),'utf8');
