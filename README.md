@@ -37,3 +37,20 @@ Alternativou je nasazení pomocí zabezpečeného GitHub Actions (deploy token/S
 2. Nasadit na WebKitty a udělat testy reálného mobilního zobrazení.
 3. Přidat bezpečný formulář pro partnerství, analytiku a administraci.
 4. Oddělit veřejnou landing page od neveřejného obchodního a AI backendu.
+
+
+## Vizuální verze TOPROCO 2.0 (6. 11. 2026)
+- Nová tmavě modrá a zlatá navigace včetně mobilního hamburger menu.
+- Vlastní vektorová horská scéna `assets/hero-sunrise.svg`, obrázky čtyř produktů a `favicon.svg`; bez závislosti na externím obrázkovém CDN.
+- Landing page pro DIP, rentu, krypto a budoucí firemní CRM; vlastní CRM zůstává soukromé.
+- Sekce výhod, komunity, obchodních partnerů, bezpečnosti, obchodních scénářů a ilustrační vizualizace.
+- Ukázkový interaktivní investiční graf používá modelový vklad 100 000 Kč, měsíční investici 3 000 Kč a hypotetické sazby 3/5/7 % p.a.; **nejde o výkonnost skutečných produktů**.
+- Jazykové mutace: CS, SK, EN, ES, ZH.
+- Automatické kontroly `node --test tests/site.test.mjs` a `node tests/browser.mjs` (browser test vyžaduje Playwright a Chromium). V GitHub Actions se zhotovují i mobilní a desktopové screenshoty.
+
+### Jak nasadit nejnovější verzi
+WebKitty **Web Files → Git Version Control → TOPROCO → Manage → Deploy**, větev `main`. Na hostingu musí být kořen subdomény přímo adresář s `index.html` a `assets/`. Ověřte HTTPS, načtení favicon a ilustrací, přepínání jazyků, graf, kartu každé aplikace a mobilní menu.
+
+Landing page zůstává označená `noindex,nofollow`, dokud nebude hotová kontrola ochranných známek, právního textu, překladů a aktuálních regulatorních požadavků. Před ostrým spuštěním je nutné toto nastavení vědomě změnit.
+
+Nejsou implementovány: jednotná registrace, AI agenti, bankovní/tržní API, soukromá B2B CRM, prodej licencí ani platby. Pro tyto funkce bude potřeba samostatné zabezpečené backendové řešení.
