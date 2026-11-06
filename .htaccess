@@ -1,0 +1,12 @@
+# TOPROCO: ochrana internich souboru verejne landing page
+# Konfigurace Apache / LiteSpeed. Ochranu overte i na hostingu.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule (^|/)\.git(/|$) - [F,L,NC]
+  RewriteRule (^|/)\.(env|svn|hg)(/|$) - [F,L,NC]
+</IfModule>
+<IfModule mod_authz_core.c>
+  <FilesMatch "^(\.env.*|README\.md|.*\.(bak|old|sql|log|swp))$">
+    Require all denied
+  </FilesMatch>
+</IfModule>
