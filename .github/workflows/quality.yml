@@ -1,0 +1,29 @@
+name: TOPROCO site quality
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: JavaScript and markup smoke tests
+        run: node --test tests/site.test.mjs
+      - name: Validate self-hosted vector artwork
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from xml.etree import ElementTree
+          for file in Path('assets').glob('*.svg'):
+              ElementTree.parse(file)
+              print('Valid SVG:',file)
+          PY
