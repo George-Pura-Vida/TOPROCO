@@ -20,7 +20,7 @@ Subdoména `toproco.jirijanousek.cz` je vytvořená v hostingu; musí být propo
 4. **Repository Path:** přesný document root subdomény TOPROCO (ověřte v administraci, neodhadujte jej). Pokud už obsahuje soubory, nejprve bezpečně vyhodnoťte obsah; nepřepisujte cizí aplikace.
 5. **Deployment Branch:** `main`, poté spusťte **Deploy**. Při aktualizacích použijte **Manage → Deploy**.
 6. Otevřete `https://toproco.jirijanousek.cz/`, ověřte HTTPS, přesměrování, mobilní menu, všech 5 jazyků a odkazy na aplikace.
-7. Verzi před veřejnou propagací právně a obsahově schvalte a nahraďte `noindex,nofollow` za `index,follow` až po spuštění.
+7. Veřejná úvodní stránka má povolené indexování. Vlastník webu může odeslat `sitemap.xml` do Google Search Console.
 
 Alternativou je nasazení pomocí zabezpečeného GitHub Actions (deploy token/SSH). Bez bezpečně nastavených přístupových údajů není automatický deploy aktivní.
 
@@ -51,6 +51,31 @@ Alternativou je nasazení pomocí zabezpečeného GitHub Actions (deploy token/S
 ### Jak nasadit nejnovější verzi
 WebKitty **Web Files → Git Version Control → TOPROCO → Manage → Deploy**, větev `main`. Na hostingu musí být kořen subdomény přímo adresář s `index.html` a `assets/`. Ověřte HTTPS, načtení favicon a ilustrací, přepínání jazyků, graf, kartu každé aplikace a mobilní menu.
 
-Landing page zůstává označená `noindex,nofollow`, dokud nebude hotová kontrola ochranných známek, právního textu, překladů a aktuálních regulatorních požadavků. Před ostrým spuštěním je nutné toto nastavení vědomě změnit.
+Veřejná úvodní stránka má kanonickou adresu, metadata pro sdílení, strukturovaná data a sitemapu. Administrace a stránka soukromí zůstávají mimo sitemapu a mají `noindex`.
 
 Nejsou implementovány: jednotná registrace, AI agenti, bankovní/tržní API, soukromá B2B CRM, prodej licencí ani platby. Pro tyto funkce bude potřeba samostatné zabezpečené backendové řešení.
+
+
+## Aktivace administrace vzhledu na WebKitty
+
+Veřejný web má výchozí paletu i na statickém hostingu. Pro změny sdílené všemi návštěvníky je třeba PHP 8.1 nebo novější, HTTPS, zapisovatelná soukromá složka a heslo správce.
+
+1. V domovské složce hostingového účtu vytvořte `.toproco-theme` mimo `public_html` a mimo všechny ostatní veřejné kořeny. Nastavte přístup pouze pro hostingový účet (oprávnění `0700`).
+2. V terminálu hostingového účtu vytvořte hash silného hesla a uložte jej do `.toproco-theme/password.hash` s oprávněním `0600`. Příklad pro Bash. Zadané heslo se nevypíše, nepředává se jako argument procesu a neukládá se do repozitáře.
+
+   ```bash
+   umask 077
+   mkdir -p ~/.toproco-theme
+   chmod 700 ~/.toproco-theme
+   read -r -s -p "Heslo správce vzhledu (alespoň 20 znaků): " toproco_theme_password
+   printf '\n'
+   if [ "${#toproco_theme_password}" -ge 20 ]; then
+     printf '%s' "$toproco_theme_password" | php -r '$password = stream_get_contents(STDIN); if (strlen($password) > 72) { exit(1); } echo password_hash($password, PASSWORD_DEFAULT), PHP_EOL;' > ~/.toproco-theme/password.hash.new &&
+       mv ~/.toproco-theme/password.hash.new ~/.toproco-theme/password.hash
+   fi
+   unset toproco_theme_password
+   chmod 600 ~/.toproco-theme/password.hash
+   ```
+
+   Při použití jiné soukromé složky nastavte PHP proměnnou prostředí `TOPROCO_THEME_DIR` na její absolutní cestu. U výchozí složky musí PHP vidět domovský adresář stejného hostingového účtu.
+3. Otevřete `https://toproco.jirijanousek.cz/vzhled.php` a přihlaste se. Po uložení ověřte změnu v anonymním okně. Výsledná paleta se ukládá do `palette.json` ve stejné soukromé složce a další nasazení ji nepřepíše.

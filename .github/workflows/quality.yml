@@ -17,13 +17,17 @@ jobs:
         with:
           node-version: '22'
       - name: JavaScript and markup smoke tests
-        run: node --test tests/site.test.mjs
+        run: |
+          node --test tests/site.test.mjs
+          php -l vzhled.php
       - name: Install headless browser test dependency
         run: |
           npm install --no-save playwright
           npx playwright install --with-deps chromium
       - name: Test desktop, tablet and mobile interfaces
-        run: node tests/browser.mjs
+        run: |
+          node tests/browser.mjs
+          node tests/appearance.mjs
       - name: Attach screenshots for review
         if: always()
         uses: actions/upload-artifact@v4

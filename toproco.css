@@ -206,3 +206,97 @@ header .brand-sub { color: #745433; }
   color: #f6f3e9;
   border-color: #91a597;
 }
+
+/* These defaults also cover static hosting and unavailable theme storage. */
+:root {
+  --bg: #fbf8f0;
+  --paper: #fffcf6;
+  --sand: #f7e8d1;
+  --text: #20352c;
+  --link: #155e52;
+  --button: #08654b;
+  --button-ink: #ffffff;
+  --active: #f7b83d;
+  --active-ink: #000000;
+  --font-body: 16px;
+  --heading-scale: 1;
+  --body-weight: 400;
+  --heading-weight: 500;
+}
+
+body { font-size: var(--font-body); font-weight: var(--body-weight); }
+header, .insight-panel, .audience-panel, .calc, .start-step,
+#bezpecnost .security-item, #pro-koho .audience button, .insight-panel-top select {
+  background: var(--paper);
+  color: var(--text);
+}
+header .brand-sub, .desktop-nav a, .nav-drop a, main a:not([class]) { color: var(--link); }
+.desktop-nav a { font-size: calc(var(--font-body) * .74); }
+.desktop-nav a.active-home, .desktop-nav a:hover, .nav-drop a:hover,
+.hero .btn-outline, #pro-koho .audience button.selected,
+.benefit > span, .start-step span {
+  color: var(--active-ink);
+  background: var(--active);
+  border-color: var(--active);
+}
+.top-cta, .btn-primary, .product a, .product-obchod .btn, .cta .btn {
+  background: var(--button);
+  border-color: var(--button);
+  color: var(--button-ink);
+}
+.top-cta:hover, .btn-primary:hover, .product a:hover, .product-obchod .btn:hover, .cta .btn:hover {
+  background: var(--button);
+  color: var(--button-ink);
+  filter: brightness(.92);
+}
+.hero .btn-outline:hover { background: var(--active); color: var(--active-ink); filter: brightness(.92); }
+main .btn-outline:not(.hero .btn-outline) { color: var(--link); border-color: currentColor; }
+main .btn-outline:not(.hero .btn-outline):hover { background: var(--paper); }
+.product-obchod, #komunita, .cta { background: var(--sand); border-color: var(--border); }
+.hero .eyebrow, .hero h1 em, .kicker, #komunita .kicker, .calc-result output { color: var(--link); }
+.hero .lead, .section-intro, .insights-heading p, .product p, #komunita .section-intro,
+.benefit b, .start-step b, .audience-panel h3, .audience-panel p, .insight-panel h3,
+.insight-panel-top label, .legend, .allocation-legend > div, .allocation-legend b, .chart-note,
+.chart-foot, .donut-chart > span, .donut-chart small, .calc label, .calc-result p,
+#bezpecnost .security-item b, #bezpecnost .security-item p, .cta .section-intro {
+  color: var(--text);
+}
+.chart-foot strong { color: var(--link); }
+#chartGrid text { fill: var(--text); }
+.donut-chart::before { background: var(--paper); }
+#partneri, .footer, .tp-privacy-banner {
+  background: color-mix(in srgb, var(--button) 30%, #101b23);
+}
+#partneri .price { background: color-mix(in srgb, var(--button) 34%, #152732); }
+#partneri .kicker, #partneri .price small { color: #f7d99c; }
+
+.hero h1, .section h2, .benefits-section h2, .insights-section h2, .getting-started h2,
+.cta h2, .product h3 { font-weight: var(--heading-weight); }
+.hero h1 { font-size: calc(clamp(47px, 5.65vw, 82px) * var(--heading-scale)); }
+.section h2, .benefits-section h2, .insights-section h2, .getting-started h2 {
+  font-size: calc(clamp(29px, 3.6vw, 44px) * var(--heading-scale));
+}
+.cta h2 { font-size: calc(clamp(36px, 5vw, 63px) * var(--heading-scale)); }
+.product h3 { font-size: calc(22px * var(--heading-scale)); }
+.product-obchod h3 { font-size: calc(clamp(35px, 5vw, 63px) * var(--heading-scale)); }
+.hero .lead { font-size: calc(var(--font-body) * 1.12); }
+.section-intro, .product-obchod p, .audience-panel p { font-size: var(--font-body); }
+.product p:not(.product-obchod p), .price p, .price ul, .security-item p,
+.insights-heading p, .calc label { font-size: calc(var(--font-body) * .875); }
+main .btn, .product a, .top-cta { font-size: calc(var(--font-body) * .875); }
+.footer .footer-admin {
+  display: inline-block;
+  margin-top: 10px;
+  color: #d4e2d8;
+  font-size: .75rem;
+  text-underline-offset: .2em;
+}
+@media (max-width: 1180px) {
+  .desktop-nav, .top-cta { display: none; }
+  .menu-button { display: block; }
+  .lang { margin-left: auto; }
+  .nav-drop.open { display: block; }
+}
+@media (max-width: 860px) {
+  .hero h1 { font-size: calc(clamp(38px, 9vw, 68px) * var(--heading-scale)); overflow-wrap: anywhere; }
+}
