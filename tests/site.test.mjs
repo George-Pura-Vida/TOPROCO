@@ -8,16 +8,19 @@ test('HTML includes semantic structure and unique IDs',()=>{
   for(const token of ['<html lang="cs"','<main id="content"','</main>','<footer','</html>'])assert.ok(html.includes(token),token);
   assert.equal(new Set(ids).size,ids.length);
 });
-test('All four product cards link to intended destinations without exposing CRM data',()=>{
-  for(const domain of ['muj-dip.jirijanousek.cz','moje-renta.jirijanousek.cz','moje-krypto.jirijanousek.cz','muj-kmen.jirijanousek.cz'])assert.ok(html.includes(domain),domain);
+test('All five product cards link to intended destinations without exposing CRM data',()=>{
+  for(const domain of ['muj-dip.jirijanousek.cz','moje-renta.jirijanousek.cz','moje-krypto.jirijanousek.cz','muj-kmen.jirijanousek.cz','muj-obchod.jirijanousek.cz'])assert.ok(html.includes(domain),domain);
   assert.match(html,/href="https:\/\/muj-kmen\.jirijanousek\.cz\/"[^>]*data-i="partnerApp"/);
   assert.ok(html.includes('Soukromé CRM pro klientskou péči'));
+  assert.match(html,/href="https:\/\/muj-obchod\.jirijanousek\.cz\/"[^>]*data-i="openShop"/);
+  assert.equal([...html.matchAll(/<article class="product /g)].length,5);
 });
 test('All responsive artwork is self-hosted',()=>{
-  for(const file of ['hero-sunrise','product-dip','product-renta','product-krypto','product-kmen']){
-    assert.ok(existsSync(new URL('../assets/'+file+'.svg',import.meta.url)),file);
-  }
-  assert.ok(html.includes('max-width:620px'));
+  const photos=[...new Set(html.match(/assets\/[a-z0-9-]+\.webp/g))];
+  assert.equal(photos.length,8);
+  for(const file of photos)assert.ok(existsSync(new URL('../'+file,import.meta.url)),file);
+  const styles=readFileSync(new URL('../toproco.css',import.meta.url),'utf8');
+  assert.ok(styles.includes('max-width: 620px'));
 });
 test('Interaction code parses and covers five locales',()=>{
   const scripts=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)];

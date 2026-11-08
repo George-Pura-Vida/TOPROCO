@@ -7,7 +7,7 @@
 ## Co je hotové
 - Responzivní HTML/CSS/JavaScript bez externích knihoven.
 - Přepínání češtiny, slovenštiny, angličtiny, španělštiny a zjednodušené čínštiny.
-- Odkazy na Moje renta, Moje krypto, Můj DIP a Můj kmen; poslední aplikace zůstává soukromá.
+- Odkazy na Moje renta, Moje krypto, Můj DIP, Můj kmen a Můj obchod. Můj kmen zůstává soukromý.
 - Komunitní koncept, nabídka partnerství, **ilustrativní** finanční kalkulace.
 - Mobilní hamburger menu, klávesnicové ovládání a viditelná právní upozornění.
 
