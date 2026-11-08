@@ -20,6 +20,21 @@ try{
       await img.decode();
     }
   });
+  const photos=await page.locator('.product-cover img').evaluateAll(imgs=>imgs.map(img=>({
+    alt: img.alt, source: new URL(img.currentSrc).pathname,
+    width: img.getBoundingClientRect().width, height: img.getBoundingClientRect().height,
+  })));
+  assert.equal(photos.length,5);
+  assert.equal(new Set(photos.map(photo=>photo.alt)).size,5);
+  for(const photo of photos){
+    assert.ok(photo.alt.length>15,'Missing product photo description');
+    assert.match(photo.source, /-(320|640|960)\.webp$/);
+    assert.ok(Math.abs(photo.width/photo.height-16/9)<.01,'Product photo is not 16:9 at '+width);
+  }
+  if(width===320 || width===1440){
+    assert.match(photos[0].source, width===320 ? /-320\.webp$/ : /-960\.webp$/);
+    assert.ok(photos.slice(1).every(photo=>photo.source.endsWith('-320.webp')));
+  }
   assert.deepEqual(errors,[],'JavaScript errors at '+width);
   if(width<=1080){
     await page.locator('#mobileNavButton').click();
@@ -32,6 +47,11 @@ try{
     for(const locale of ['sk','es','zh','en']){
       await page.locator('#lang').selectOption(locale);
       assert.notEqual(await page.locator('.product-obchod a').innerText(),'Otevřít Můj obchod ↗');
+      const translated=await page.locator('.product-cover img').evaluateAll(imgs=>imgs.map(img=>img.alt));
+      for(const [i,alt] of translated.entries()){
+        assert.ok(alt.length>=10);
+        assert.notEqual(alt,photos[i].alt);
+      }
     }
     assert.match(await page.locator('.hero h1').innerText(),/Good plans start with/);
     assert.equal(await page.locator('.product-obchod a').getAttribute('href'),'https://muj-obchod.jirijanousek.cz/');

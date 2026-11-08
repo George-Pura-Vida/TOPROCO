@@ -17,7 +17,7 @@ test('All five product cards link to intended destinations without exposing CRM 
 });
 test('All responsive artwork is self-hosted',()=>{
   const photos=[...new Set(html.match(/assets\/[a-z0-9-]+\.webp/g))];
-  assert.equal(photos.length,8);
+  assert.equal(photos.length,18);
   for(const file of photos)assert.ok(existsSync(new URL('../'+file,import.meta.url)),file);
   const styles=readFileSync(new URL('../toproco.css',import.meta.url),'utf8');
   assert.ok(styles.includes('max-width: 620px'));

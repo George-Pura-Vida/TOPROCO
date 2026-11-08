@@ -102,7 +102,7 @@ header .brand-sub { color: #745433; }
   border-radius: 16px;
   box-shadow: none;
 }
-.product-cover { height: auto; aspect-ratio: 1.68; background: #e2d5c3; }
+.product-cover { height: auto; aspect-ratio: 16 / 9; background: #e2d5c3; }
 .product-cover:after { display: none; }
 .product-body { padding: 16px 18px 18px; min-height: 0; }
 .product-symbol { display: none; }
@@ -123,8 +123,7 @@ header .brand-sub { color: #745433; }
   background: #e7ede4;
   border-color: #ccd9ca;
 }
-.product-obchod .product-cover { aspect-ratio: auto; min-height: 320px; }
-.product-obchod .product-cover img { position: absolute; inset: 0; }
+.product-obchod .product-cover { align-self: center; }
 .product-obchod .product-body {
   align-items: flex-start;
   justify-content: center;
@@ -176,9 +175,10 @@ header .brand-sub { color: #745433; }
   .hero h1 { font-size: clamp(42px, 9vw, 68px); }
   .hero-photo img { aspect-ratio: 1.6; }
 }
-@media (max-width: 620px) {
+@media (max-width: 760px) {
   .product-obchod { grid-template-columns: 1fr; }
-  .product-obchod .product-cover { min-height: 0; aspect-ratio: 1.58; }
+}
+@media (max-width: 620px) {
   .hero-photo, .community-photo { border-radius: 13px; }
   .hero-photo img { aspect-ratio: 1.33; }
   .product-grid { gap: 13px; }
