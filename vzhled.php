@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+const FIRST_ADMIN_SETUP = 'ad63caba504a1c05ee0fcddff54c15bd39be845ebb4a7f92a099cd2a8177acd2 1794393468';
+
 const PALETTES = [
     'ziva' => ['Smaragd a jantar', '#fbf8f0', '#fffcf6', '#f7e8d1', '#20352c', '#155e52', '#08654b', '#f7b83d'],
     'modra' => ['Modrá a měď', '#f4f8ff', '#ffffff', '#e1edff', '#1d2d46', '#16468a', '#1756b3', '#faad68'],
@@ -90,7 +92,7 @@ function cssVars(array $palette): array
     return $vars;
 }
 
-function privateDirectory(): ?string
+function privateDirectory(bool $create = false): ?string
 {
     $configured = getenv('TOPROCO_THEME_DIR');
     $home = getenv('HOME');
@@ -101,17 +103,25 @@ function privateDirectory(): ?string
     if ($candidate === '' || $candidate[0] !== '/') {
         return null;
     }
-    $directory = realpath($candidate);
+    $candidate = rtrim($candidate, '/');
+    $parent = realpath(dirname($candidate));
     $documentRoot = realpath($_SERVER['DOCUMENT_ROOT'] ?? __DIR__);
-    if ($directory === false || $documentRoot === false || !is_dir($directory)) {
+    if ($parent === false || $documentRoot === false || is_link($candidate)) {
         return null;
     }
+    $directory = $parent . '/' . basename($candidate);
     foreach ([$documentRoot, __DIR__] as $publicRoot) {
         if (str_starts_with($directory . '/', rtrim($publicRoot, '/') . '/')) {
             return null;
         }
     }
-    return $directory;
+    if (in_array('public_html', explode('/', $directory), true)) {
+        return null;
+    }
+    if ($create && !is_dir($directory)) {
+        @mkdir($directory, 0700);
+    }
+    return is_dir($directory) ? realpath($directory) ?: null : null;
 }
 
 function savedPalette(?string $directory): array
@@ -127,22 +137,64 @@ function savedPalette(?string $directory): array
     return defaults(PALETTES['ziva']);
 }
 
-function savePalette(string $directory, array $palette): bool
+function saveJson(string $directory, string $filename, array $values): bool
 {
-    $temporary = @tempnam($directory, 'palette-');
+    $temporary = @tempnam($directory, '.write-');
     if ($temporary === false || dirname($temporary) !== $directory) {
         if ($temporary !== false) {
             @unlink($temporary);
         }
         return false;
     }
-    $data = json_encode($palette, JSON_THROW_ON_ERROR) . "\n";
+    $data = json_encode($values, JSON_THROW_ON_ERROR) . "\n";
     $saved = @file_put_contents($temporary, $data) === strlen($data)
-        && @rename($temporary, $directory . '/palette.json');
+        && @rename($temporary, $directory . '/' . $filename);
     if (!$saved) {
         @unlink($temporary);
     }
     return $saved;
+}
+
+function readAdmin(?string $directory): array
+{
+    if ($directory === null) {
+        return ['', ''];
+    }
+    $data = @file_get_contents($directory . '/admin.json', false, null, 0, 2048);
+    if ($data !== false) {
+        $account = json_decode($data, true);
+        return [
+            is_string($account['email'] ?? null) ? strtolower(trim($account['email'])) : '',
+            is_string($account['hash'] ?? null) ? $account['hash'] : '',
+        ];
+    }
+    return [
+        strtolower(trim((string) @file_get_contents($directory . '/admin.email', false, null, 0, 320))),
+        trim((string) @file_get_contents($directory . '/password.hash', false, null, 0, 1024)),
+    ];
+}
+
+function hasAdminFiles(?string $directory): bool
+{
+    return $directory !== null && (file_exists($directory . '/admin.json') || file_exists($directory . '/password.hash'));
+}
+
+function installAdmin(string $directory, string $email, string $password): bool
+{
+    $lock = @fopen($directory . '/.admin-setup.lock', 'c');
+    if ($lock === false) {
+        return false;
+    }
+    try {
+        if (!flock($lock, LOCK_EX)) {
+            return false;
+        }
+        clearstatcache();
+        return !hasAdminFiles($directory)
+            && saveJson($directory, 'admin.json', ['email' => $email, 'hash' => password_hash($password, PASSWORD_DEFAULT)]);
+    } finally {
+        fclose($lock);
+    }
 }
 
 function escape(string $value): string
@@ -187,18 +239,47 @@ if ($method !== 'GET' && $method !== 'HEAD' && $method !== 'POST') {
     exit;
 }
 $https = isset($_SERVER['HTTPS']) && in_array(strtolower((string) $_SERVER['HTTPS']), ['on', '1'], true);
-$hash = $directory === null ? '' : trim((string) @file_get_contents($directory . '/password.hash', false, null, 0, 1024));
-$configured = $https && $directory !== null && is_writable($directory) && password_get_info($hash)['algo'] !== null;
+[$adminEmail, $hash] = readAdmin($directory);
+$configured = $https && $directory !== null && is_writable($directory)
+    && filter_var($adminEmail, FILTER_VALIDATE_EMAIL) !== false && password_get_info($hash)['algo'] !== null;
+$setup = $https && ($_GET['setup'] ?? null) === '1' && !hasAdminFiles($directory);
+$setupError = '';
+if ($setup) {
+    $setupConfig = getenv('TOPROCO_THEME_SETUP') ?: FIRST_ADMIN_SETUP;
+    if (!preg_match('/\A([a-f0-9]{64}) ([0-9]+)\z/', $setupConfig, $setupParts) || time() >= (int) $setupParts[2]) {
+        $setup = false;
+        $setupError = 'Platnost aktivačního kódu vypršela. Účet lze nastavit na hostingu.';
+    } elseif ($method === 'POST') {
+        $key = $_POST['setup_key'] ?? null;
+        $email = $_POST['email'] ?? null;
+        $password = $_POST['password'] ?? null;
+        if (!is_string($key) || strlen($key) > 128 || !hash_equals($setupParts[1], hash('sha256', trim($key)))) {
+            http_response_code(403);
+            $setupError = 'Aktivační kód se nepodařilo ověřit.';
+        } elseif (!is_string($email) || strlen($email) > 254 || !filter_var(trim($email), FILTER_VALIDATE_EMAIL)
+            || !is_string($password) || strlen($password) < 16 || strlen($password) > 72 || str_contains($password, "\0")
+            || $password !== ($_POST['confirm_password'] ?? null)) {
+            http_response_code(422);
+            $setupError = 'Zkontrolujte e-mail a shodná hesla o délce 16 až 72 bajtů.';
+        } elseif (($directory = privateDirectory(true)) === null || !installAdmin($directory, strtolower(trim($email)), $password)) {
+            http_response_code(500);
+            $setupError = 'Účet se nepodařilo vytvořit. Pokud už je aktivní, použijte přihlášení. Jinak zkontrolujte soukromou složku na hostingu.';
+        } else {
+            header('Location: /vzhled.php', true, 303);
+            exit;
+        }
+    }
+}
 $sessionReady = $configured && session_start([
     'name' => 'ToprocoVzhled', 'use_strict_mode' => 1, 'use_only_cookies' => 1,
     'cookie_path' => '/vzhled.php', 'cookie_secure' => true, 'cookie_httponly' => true, 'cookie_samesite' => 'Strict',
 ]);
 $message = '';
-$error = '';
+$error = $setupError;
 $authenticated = false;
 if ($sessionReady) {
     $_SESSION['csrf'] ??= bin2hex(random_bytes(32));
-    $fingerprint = hash('sha256', $hash);
+    $fingerprint = hash('sha256', $adminEmail . "\0" . $hash);
     $authenticated = hash_equals($fingerprint, $_SESSION['admin'] ?? '') && time() - ($_SESSION['last'] ?? 0) < 1800;
     if ($authenticated) {
         $_SESSION['last'] = time();
@@ -212,18 +293,20 @@ if ($sessionReady) {
             http_response_code(403);
             $error = 'Platnost formuláře vypršela. Načtěte stránku a zkuste to znovu.';
         } elseif (!$authenticated && $action === 'login') {
+            $email = $_POST['email'] ?? null;
             $password = $_POST['password'] ?? null;
             if (time() < ($_SESSION['retry_after'] ?? 0)) {
                 http_response_code(429);
                 $error = 'Počkejte chvíli před dalším pokusem.';
-            } elseif (is_string($password) && strlen($password) <= 128 && password_verify($password, $hash)) {
+            } elseif (is_string($password) && strlen($password) <= 72 && password_verify($password, $hash)
+                && is_string($email) && strlen($email) <= 254 && hash_equals($adminEmail, strtolower(trim($email)))) {
                 session_regenerate_id(true);
                 $_SESSION = ['admin' => $fingerprint, 'last' => time(), 'csrf' => bin2hex(random_bytes(32))];
                 header('Location: /vzhled.php', true, 303);
                 exit;
             } else {
                 $_SESSION['retry_after'] = time() + 3;
-                $error = 'Heslo se nepodařilo ověřit.';
+                $error = 'E-mail nebo heslo nesouhlasí.';
             }
         } elseif ($authenticated && $action === 'logout') {
             $_SESSION = [];
@@ -240,7 +323,7 @@ if ($sessionReady) {
                 http_response_code(422);
                 $palette = $submitted;
                 $error = 'Zvyšte kontrast textu a odkazů vůči všem třem pozadím na alespoň 4,5 : 1.';
-            } elseif (!savePalette($directory, $submitted)) {
+            } elseif (!saveJson($directory, 'palette.json', $submitted)) {
                 http_response_code(500);
                 $palette = $submitted;
                 $error = 'Nastavení se nepodařilo uložit. Zkontrolujte práva soukromé složky na hostingu.';
@@ -266,24 +349,39 @@ if ($sessionReady) {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Vzhled webu · TOPROCO</title>
+<title>Admin · TOPROCO</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/vzhled-admin.css">
 </head>
 <body>
 <main class="admin">
     <a href="/" class="back">← TOPROCO</a>
-    <h1>Vzhled webu</h1>
+    <h1><?= $authenticated ? 'Vzhled webu' : 'Admin' ?></h1>
     <?php if ($error !== ''): ?><p class="notice error" role="alert"><?= escape($error) ?></p><?php endif ?>
     <?php if ($message !== ''): ?><p class="notice" role="status"><?= escape($message) ?></p><?php endif ?>
-    <?php if (!$sessionReady): ?>
+    <?php if ($setup): ?>
+        <p>Pomocí jednorázového kódu si nastavte e-mail a heslo správce.</p>
+        <form action="/vzhled.php?setup=1" method="post" class="login">
+            <label for="setup-key">Aktivační kód</label>
+            <input type="password" id="setup-key" name="setup_key" maxlength="128" autocomplete="off" required>
+            <label for="setup-email">E-mail správce</label>
+            <input type="email" id="setup-email" name="email" maxlength="254" autocomplete="username" required>
+            <label for="setup-password">Nové heslo</label>
+            <input type="password" id="setup-password" name="password" minlength="16" maxlength="72" autocomplete="new-password" required>
+            <label for="confirm-password">Potvrďte heslo</label>
+            <input type="password" id="confirm-password" name="confirm_password" minlength="16" maxlength="72" autocomplete="new-password" required>
+            <button>Aktivovat správce</button>
+        </form>
+    <?php elseif (!$sessionReady): ?>
         <p>Administraci vzhledu je potřeba aktivovat v nastavení hostingu. Web zatím používá dostupné barevné schéma.</p>
     <?php elseif (!$authenticated): ?>
-        <p>Přihlaste se heslem správce vzhledu.</p>
+        <p>Přihlaste se e-mailem a heslem správce.</p>
         <form method="post" class="login">
             <input type="hidden" name="csrf" value="<?= escape($_SESSION['csrf']) ?>">
+            <label for="email">E-mail správce</label>
+            <input type="email" id="email" name="email" maxlength="254" autocomplete="username" required>
             <label for="password">Heslo správce</label>
-            <input type="password" id="password" name="password" maxlength="128" autocomplete="current-password" required>
+            <input type="password" id="password" name="password" maxlength="72" autocomplete="current-password" required>
             <button name="action" value="login">Přihlásit se</button>
         </form>
     <?php else: ?>

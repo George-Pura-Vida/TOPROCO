@@ -285,11 +285,22 @@ main .btn-outline:not(.hero .btn-outline):hover { background: var(--paper); }
 .insights-heading p, .calc label { font-size: calc(var(--font-body) * .875); }
 main .btn, .product a, .top-cta { font-size: calc(var(--font-body) * .875); }
 .footer .footer-admin {
-  display: inline-block;
-  margin-top: 10px;
-  color: #d4e2d8;
-  font-size: .75rem;
-  text-underline-offset: .2em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin-top: 9px;
+  padding: 0 17px;
+  border: 1px solid #f3cb7c;
+  border-radius: 9px;
+  color: #f3cb7c;
+  font-size: .875rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+.footer .footer-admin:hover, .footer .footer-admin:focus-visible {
+  background: #f3cb7c;
+  color: #193c30;
 }
 @media (max-width: 1180px) {
   .desktop-nav, .top-cta { display: none; }

@@ -58,15 +58,21 @@ Nejsou implementovány: jednotná registrace, AI agenti, bankovní/tržní API, 
 
 ## Aktivace administrace vzhledu na WebKitty
 
-Veřejný web má výchozí paletu i na statickém hostingu. Pro změny sdílené všemi návštěvníky je třeba PHP 8.1 nebo novější, HTTPS, zapisovatelná soukromá složka a heslo správce.
+Veřejný web má výchozí paletu i na statickém hostingu. Pro změny sdílené všemi návštěvníky je třeba PHP 8.1 nebo novější, HTTPS, zapisovatelná soukromá složka a přístup správce přes e-mail a heslo. Odkaz **Admin** je v patičce.
+
+Při prvním nasazení lze účet založit na `/vzhled.php?setup=1` s platným jednorázovým kódem od správce nasazení. Formulář žádá o e-mail a nové heslo a uloží účet v soukromém adresáři. Po založení se kód vypne. Pokud platnost kódu vypršela nebo hosting nemůže vytvořit soukromou složku, použijte následující postup.
 
 1. V domovské složce hostingového účtu vytvořte `.toproco-theme` mimo `public_html` a mimo všechny ostatní veřejné kořeny. Nastavte přístup pouze pro hostingový účet (oprávnění `0700`).
-2. V terminálu hostingového účtu vytvořte hash silného hesla a uložte jej do `.toproco-theme/password.hash` s oprávněním `0600`. Příklad pro Bash. Zadané heslo se nevypíše, nepředává se jako argument procesu a neukládá se do repozitáře.
+2. U nového ručního nastavení vytvořte v terminálu hostingového účtu hash silného hesla a uložte jej do `.toproco-theme/password.hash` s oprávněním `0600`. Příklad pro Bash. Zadané heslo se nevypíše, nepředává se jako argument procesu a neukládá se do repozitáře.
 
    ```bash
    umask 077
    mkdir -p ~/.toproco-theme
    chmod 700 ~/.toproco-theme
+   read -r -p "E-mail správce: " toproco_theme_email
+   printf '%s\n' "$toproco_theme_email" > ~/.toproco-theme/admin.email
+   unset toproco_theme_email
+   chmod 600 ~/.toproco-theme/admin.email
    read -r -s -p "Heslo správce vzhledu (alespoň 20 znaků): " toproco_theme_password
    printf '\n'
    if [ "${#toproco_theme_password}" -ge 20 ]; then
@@ -78,4 +84,6 @@ Veřejný web má výchozí paletu i na statickém hostingu. Pro změny sdílen�
    ```
 
    Při použití jiné soukromé složky nastavte PHP proměnnou prostředí `TOPROCO_THEME_DIR` na její absolutní cestu. U výchozí složky musí PHP vidět domovský adresář stejného hostingového účtu.
+   U dřívější instalace pouze s `password.hash` doplňte `admin.email` se svým přihlašovacím e-mailem. U účtu založeného přes webový formulář je autoritativní `admin.json`, který už obsahuje e-mail a hash hesla.
+
 3. Otevřete `https://toproco.jirijanousek.cz/vzhled.php` a přihlaste se. Po uložení ověřte změnu v anonymním okně. Výsledná paleta se ukládá do `palette.json` ve stejné soukromé složce a další nasazení ji nepřepíše.
