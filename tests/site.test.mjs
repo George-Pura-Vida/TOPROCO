@@ -17,8 +17,10 @@ test('All five product cards link to intended destinations without exposing CRM 
 });
 test('All responsive artwork is self-hosted',()=>{
   const photos=[...new Set(html.match(/assets\/[a-z0-9-]+\.webp/g))];
-  assert.equal(photos.length,18);
+  assert.equal(photos.length,19);
   for(const file of photos)assert.ok(existsSync(new URL('../'+file,import.meta.url)),file);
+  assert.match(html, /src="assets\/pracovni-schuzka-1240\.webp"[^>]+fetchpriority="high"/);
+  assert.match(html, /src="assets\/spoluprace-v-kancelari-960\.webp"[^>]+loading="lazy"/);
   const styles=readFileSync(new URL('../toproco.css',import.meta.url),'utf8');
   assert.ok(styles.includes('max-width: 620px'));
 });
@@ -33,7 +35,7 @@ test('The homepage is indexable and exposes the canonical URL and sitemap',()=>{
   const home='https://toproco.jirijanousek.cz/';
   assert.ok(html.includes('<meta name="robots" content="index, follow'));
   assert.ok(html.includes('<link rel="canonical" href="'+home+'">'));
-  assert.ok(existsSync(new URL('../assets/toproco-sdileni.jpg',import.meta.url)));
+  assert.ok(existsSync(new URL('../assets/toproco-pracovni-schuzka-sdileni.jpg',import.meta.url)));
   const sitemap=readFileSync(new URL('../sitemap.xml',import.meta.url),'utf8');
   assert.ok(sitemap.includes('<loc>'+home+'</loc>'));
   const robots=readFileSync(new URL('../robots.txt',import.meta.url),'utf8');
